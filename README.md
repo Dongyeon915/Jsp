@@ -99,6 +99,10 @@ jsp는 클라이언트 요청을 http request.으로 정보를 확인할수있�
  ------------------------------------------------------------------------------------------------
  # 포워드(Forward)와 리다이렉트(Redirect)
  ## 포워드(Forward) 서버내에서 처리할 페이지를 연결해주는 작업 redirect와는 다르게 http를 다시하지않은다. 서버내에서 요청페이지 이동
+ 1. 요청을 구분하여 처리할 서블릿을 결정하는 경우
+ 2. 처리를 여러 단꼐의 서블릿으로 구분하여 필요한 단계로 바로 이동하는 경우
+ 3. 브라우저에 표시되는 경로를 숨기고 싶은 경우
+ 4. 요청시 생성된 request, response객체의 값이 유지된다.
  ### 예제
  ### forward.jsp
  ````
@@ -148,6 +152,51 @@ jsp는 클라이언트 요청을 http request.으로 정보를 확인할수있�
 	<h3>요청 url부분이 변경되지 않고 request객체도 유지된다.</h3><br>
 	<%= "forward_ret.jsp에서 request파라미터 확인" %><br>
 	<%= "이름" +name %>
+	<%= "나이" +age %>
+</body>
+</html>
+````
+ ## 리다이렉트(Redirect) 
+ 1. 요청을 검증하여 알맞은 페이지로 요청을 하도록 처리하려는 경우
+ 2. 에러 또는 예외 처리에 대한 결과 페이지를 처리하려는 경우
+ 3. 브라우저에 주소 창에 경로가 표시된다(redirect페이지 경로로 표시)
+ 4. 새로운 요청이므로 request,response객체는 새로 생성된다.
+ ### 예제
+ ### redirect.jsp
+````
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+    <%
+    	String name = request.getParameter("name");
+    	String age = request.getParameter("age");
+    	System.out.println("rediect.jsp에서 request파리미터 확인");
+    	System.out.println("이름" +name);
+    	System.out.println("나이" +age);
+    	response.sendRedirect("redirect_ret.jsp");
+    	
+    %>
+<!DOCTYPE html>
+````
+### redirect_ret.jsp
+````
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+    
+    <%
+    	String name = request.getParameter("name");
+    	String age = request.getParameter("age");
+    %>
+	    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>리다이렉트 결과</title>
+</head>
+<body>
+	<p>브라우저에서 새로 요청한 것이므로<p/><br>
+	<p>요청한 URL부분이 변경되고 request객체도 새로 생성됩니다.(값 유지 되지않음)</p>
+	<%= "이름"+name %>
 	<%= "나이" +age %>
 </body>
 </html>
