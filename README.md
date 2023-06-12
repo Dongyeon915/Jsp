@@ -96,3 +96,59 @@ jsp는 클라이언트 요청을 http request.으로 정보를 확인할수있�
  데이터 전송 길이에 대한 제한이 없음
  HTTP REQUEST BODY에 데이터를 담으므로 노출 안됨 (보안성과는 상관없이 보내는 방법의 노출일뿐)
  ````
+ ------------------------------------------------------------------------------------------------
+ # 포워드(Forward)와 리다이렉트(Redirect)
+ ## 포워드(Forward)
+ ### 예제
+ ### forward.jsp
+ ````
+ <%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+    <%
+    	String name = request.getParameter("name");
+   		String age = request.getParameter("age");
+   		System.out.println("forward.jsp에서 request파라미터 확인");
+   		System.out.println("이름" +name);
+   		System.out.println("나이" +age);
+   		System.out.println("forward_ret으로 요청을 전달");
+   		// RequestDispatcher는 클라이언트로부터 최초에 들어온 요청을 JSP/Servlet 내에서 원하는 자원으로 요청을 넘기는(보내는) 역할을 수행하거나
+   		// 특정 자원에 처리를 요청하고 처리 결과를 얻어오는 기능을 수행하는 클래스입니다
+   		RequestDispatcher dispatcher = request.getRequestDispatcher("forward_ret.jsp");
+   		// forward_ret.jsp로 요청을 전달
+   		dispatcher.forward(request, response);   
+    %>
+    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>forwar요청전달</title>
+</head>
+<body>
+
+</body>
+</html>
+ ````
+### forward_ret.jsp
+````
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+    <%
+    	String name = request.getParameter("name");
+    	String age = request.getParameter("age");
+    %>
+    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>포워드 결과</title>
+</head>
+<body>
+	<h3>요청 url부분이 변경되지 않고 request객체도 유지된다.</h3><br>
+	<%= "forward_ret.jsp에서 request파라미터 확인" %><br>
+	<%= "이름" +name %>
+	<%= "나이" +age %>
+</body>
+</html>
+````
